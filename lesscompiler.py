@@ -80,10 +80,10 @@ class Compiler:
 
     dirs = self.parseBaseDirs(settings['base_dir'], settings['output_dir'])
 
-    # if you've set the main_file (relative to current file), only that file gets compiled
+    # if you've set the main_file (relative to the less directory), only that file gets compiled
     # this allows you to have one file with lots of @imports
     if settings['main_file']:
-      fn = os.path.join(os.path.dirname(fn), settings['main_file'])
+      fn = os.path.join(dirs['less'], settings['main_file'])
 
     # compile the LESS file
     return self.convertLess2Css(settings['lessc_command'], dirs=dirs, file=fn, minimised=settings['minimised'], outputFile=settings['output_file'])

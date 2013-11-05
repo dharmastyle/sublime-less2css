@@ -58,7 +58,7 @@ The allowed values are `true` and `false`. When this setting is `true` the plugi
 You can still compile the file through *Tools \ Less>Css \ Compile this less file to css* or the appropriate shortcut.
 
 ### main_file
-When you specify a main file only this file will get compiled when you save any LESS file. This is especially useful if you have one LESS file which imports all your other LESS files. Please note that this setting is only used when compiling a single LESS file and not when compiling all LESS files in the LESS base folder through *Tools \ Less>Css \ Compile all less in less base directory to css*.
+When you specify a main file only this file will get compiled when you save any LESS file. The location of this main file will be relative to the less base directory. This is especially useful if you have one LESS file which imports all your other LESS files. Please note that this setting is only used when compiling a single LESS file and not when compiling all LESS files in the LESS base folder through *Tools \ Less>Css \ Compile all less in less base directory to css*.
 
 ### minify
 The allowed values are `true` and `false`. When this setting is set to `true` the LESS compiler will be instructed to create a minified CSS file.

@@ -141,7 +141,7 @@ class Compiler:
         # gets compiled this allows you to have one file with lots of @imports
         if self.settings['main_file']:
             self.file_name = os.path.join(
-                os.path.dirname(self.file_name),
+                dirs['less'],
                 self.settings['main_file']
             )
 

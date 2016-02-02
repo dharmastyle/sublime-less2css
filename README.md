@@ -11,6 +11,12 @@ Sublime Text 2 and 3 Plugin to compile less files to css on save. Requires lessc
 
 NB This plugin requires lessc to be in your execution path
 
+# Important notes:
+* If you have any issues raise them at : https://github.com/timdouglas/sublime-less2css/issues/
+* If using ruby less you will need to set `minify=false` and
+`disableVerbose=true` within your less2css settings. If you do not do this
+compiling of less files will not work.
+
 # Installation
 
 ## Install The Plugin
@@ -29,6 +35,14 @@ Less2Css requires lessc to compile less to css.
 
 	    npm install less -gd
 
+4. Optional: To use minification you will need a minifier. Install less-plugin-clean-css or similar.
+
+        npm install -g less-plugin-clean-css
+
+5. Optional: To use autoprefix. Install [less-plugin-autoprefix](https://github.com/less/less-plugin-autoprefix).
+
+        npm install -g less-plugin-autoprefix
+
 
 ### Windows
 
@@ -41,7 +55,15 @@ Less2Css requires lessc to compile less to css.
 less2css can be configured on two levels. There are the user settings which you can access through `Preferences\Package Settings\less2css`. These are your global settings. Below you will find a description for all the various settings. The second level where you can configure less2css is at the project level. If you have a Sublime Text project file, it has the extension `.sublime-project`, you can override your user settings for just that project. This will be described at the end of this chapter.
 
 ### autoCompile
-The allowed values are `true` and `false`. When this setting is set to `true` the plugin will compile your LESS file each time you save it.
+The allowed values are `true` and `false`. When this setting is set to `true` the plugin will compile your LESS file each time you save it (otherwise you can compile from Sublime's "Tools" > "Less > Css" > "Compile this file to css" menu item).
+
+### createCssSourceMaps
+When `true` a css source map will be generated.
+
+## disableVerbose
+This option allows for the disabling of the verbose option which is used by
+default. The only time you might want / need to turn this off is then using
+the ruby gem less (which does not support --verbose).
 
 ### lessBaseDir
 This folder is only used when compiling all LESS files at once through *Tools \ Less>Css \ Compile all less in less base directory to css*. This can be an absolute path or a relative path. A relative path is useful when your projects always use the same structure, like a folder named `less` to keep all your LESS files in. When compiling all files at once it will also process all subfolders under the base folder.
@@ -58,21 +80,26 @@ The allowed values are `true` and `false`. When this setting is `true` the plugi
 You can still compile the file through *Tools \ Less>Css \ Compile this less file to css* or the appropriate shortcut.
 
 ### main_file
-When you specify a main file only this file will get compiled when you save any LESS file. The location of this main file will be relative to the less base directory. This is especially useful if you have one LESS file which imports all your other LESS files. Please note that this setting is only used when compiling a single LESS file and not when compiling all LESS files in the LESS base folder through *Tools \ Less>Css \ Compile all less in less base directory to css*.
+When you specify a main file only this file will get compiled when you save any LESS file. This is especially useful if you have one LESS file which imports all your other LESS files. Please note that this setting is only used when compiling a single LESS file and not when compiling all LESS files in the LESS base folder through *Tools \ Less>Css \ Compile all less in less base directory to css*. *Note: If your main file imports other files, the other files must be in the same folder for less2css to automatically compile your main file when editing an imported file.*
 
 ### minify
-The allowed values are `true` and `false`. When this setting is set to `true` the LESS compiler will be instructed to create a minified CSS file.
+Default: True
+The allowed values are `true`/`false` or a string which passes a minification option to lessc (e.g. `--clean-css`).
+When this setting is set to `true` the LESS compiler will be instructed to create a minified CSS file. The recommended less minifier is `npm install -g less-plugin-clean-css` which is a required dependancy when `minify=true`.
+
+### minName
+When the minify setting is set to `true` the LESS compiler will add `.min` to the created minified version of the css files: `default.less` would be compiled to the minified `default.min.css`.
 
 ### outputDir
 Use this setting to specify the folder where the CSS files will be placed. The following values are supported:
 
-### empty string or `./`
+* Empty string or `./`
 Use an empty string or `./` to have the CSS file stored in the same folder as the LESS file.
 
-#### absolute path
+* Absolute path
 Specify an absolute path to the directory where the CSS file should be stored, eg. `/home/user/projects/site/assets/css`
 
-#### relative path
+* Relative path
 Specify a partial path to the directory where the CSS should be stored, eg. `./css`. This will store the CSS files in a folder CSS in the root of the project.
 
 ### `auto` setting
@@ -114,7 +141,7 @@ The `auto` setting recognizes the following project setups:
 
 ### `shadow` setting
 
-When you specify `shadow` it is expected your LESS files are stored in a folder named `less`. Within this folder your are free to create any number of subfolder to organise your LESS files. When you compile a single file or all files through the menu command the string `less` will be replaced with `css` in the file path. For example, if you have this file structure:
+Use this setting to compile a complete `less` folder into a shadow `css` folder. It is expected your LESS files are stored in a folder named `less`. Within this folder you are free to create any number of subfolder to organise your LESS files. When you compile a single file or all files through the menu command, the string `less` will be replaced with `css` in the file path. For example, if you have this file structure:
 
 	[project]
 	    |- [less]
@@ -145,6 +172,9 @@ When you specify an output file, this will be the file name used to compile **al
 
 ### showErrorWithWindow
 Set to `true` to see parse errors in a pop up window
+
+### autoprefix
+Set to `true` to add prefixes to css after conversion from less
 
 # Project settings
 You can use the configuration settings that are described above and apply them to just the project you are working on. In order to do this you need to manually alter the `.sublime-project` file. A default project file looks like this:
